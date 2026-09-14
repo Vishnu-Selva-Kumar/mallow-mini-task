@@ -1,0 +1,167 @@
+# Conventional Commits — Commit Type Definitions
+# Reference: https://www.conventionalcommits.org/
+#
+# Usage:
+#   AI assistants (Gemini, Claude, etc.) and developers must select the SINGLE
+#   most appropriate type based on the PRIMARY PURPOSE of the change, not the file extension or name.
+#   Scope is optional but strongly recommended.
+#
+# Format:  <type>(<scope>): <short description>
+# Example: feat(auth): add Sanctum authentication middleware
+
+name: git-commit-rules
+description: Enforce Git commit types, message format, validation, and commit workflow for Laravel project.
+version: "1.0"
+
+scope:
+  applies_to:
+    - git
+    - commit
+    - git_commit
+  always_apply: true
+
+commit_format:
+  pattern: "<type>(<scope>): <description>"
+  scope_optional: true
+
+allowed_types:
+  feat:
+    description: "Add a new feature"
+  fix:
+    description: "Fix a bug"
+  refactor:
+    description: "Refactor code without changing functionality"
+  perf:
+    description: "Improve application performance"
+  docs:
+    description: "Documentation changes"
+  test:
+    description: "Add or modify tests"
+  style:
+    description: "Formatting or code-style changes only (whitespace, linting)"
+  chore:
+    description: "Maintenance changes (dependencies, packages, build tasks)"
+  build:
+    description: "Build system, Docker, Sail, or dependency changes"
+  ci:
+    description: "CI/CD configuration changes"
+  revert:
+    description: "Revert a previous commit"
+
+message_rules:
+  - "Use lowercase for the description."
+  - "Use imperative wording (e.g., 'add' not 'added', 'fix' not 'fixes')."
+  - "Keep the commit subject concise."
+  - "Prefer a maximum of 72 characters."
+  - "Do not end the description with a period."
+  - "The message must describe the actual code changes."
+  - "Never use vague messages such as update, changes, done, fix, or code changes."
+
+scope_rules:
+  preferred_scopes:
+    - auth
+    - api
+    - user
+    - role
+    - database
+    - migration
+    - model
+    - controller
+    - route
+    - middleware
+    - config
+    - docker
+    - sail
+
+workflow:
+  user_confirmation:
+    mandatory: true
+    rule: "Do not create a branch, commit, or push without explicit user confirmation."
+    instructions:
+      - "Never create or checkout a new git branch (e.g., git checkout -b, git switch -c, git branch) without explicit user confirmation."
+      - "Always ask and obtain explicit confirmation from the user before executing git commit."
+      - "Never execute git push to any remote repository without explicit user confirmation."
+
+  branching:
+    - "Never create, checkout, or switch to a new branch without explicit user confirmation."
+    - "Always consult the user or confirm the desired branch before performing any branch creation."
+
+  before_commit:
+    - "Obtain explicit confirmation from the user before creating any commit."
+    - "Run git status."
+    - "Identify files related to the current change."
+    - "Run git diff."
+    - "Review git diff --cached when staged changes exist."
+    - "Understand the actual changes before selecting the commit type."
+    - "Determine the primary purpose of the change."
+    - "Select exactly one commit type."
+    - "Select an appropriate scope when useful."
+    - "Generate the Conventional Commit message."
+    - "Verify that the message accurately represents the changes."
+
+  staging:
+    - "Stage only files related to the current logical change."
+    - "Do not blindly run git add . when unrelated changes exist."
+    - "Do not stage secrets or sensitive files."
+    - "Review git diff --cached before committing."
+
+  commit:
+    - "Obtain explicit user confirmation before running git commit."
+    - "Use the generated Conventional Commit message."
+    - "Create the commit only after staged changes have been verified."
+
+  push:
+    - "Never run git push without explicit user confirmation."
+
+  after_commit:
+    - "Run git log -1 --oneline."
+    - "Verify the final commit message."
+    - "Verify that the commit contains only the intended changes."
+
+security:
+  never_commit:
+    - ".env"
+    - ".env.*"
+    - "*.pem"
+    - "*.key"
+    - "credentials"
+    - "passwords"
+    - "API keys"
+    - "access tokens"
+    - "private keys"
+    - "secrets"
+
+multiple_changes:
+  rule: "Do not combine unrelated changes into one commit."
+  action: "Recommend separate commits for unrelated features, fixes, refactors, tests, or documentation."
+
+examples:
+  good:
+    - "feat(user): add user registration endpoint"
+    - "fix(auth): handle expired token error"
+    - "refactor(database): optimize query builder logic"
+    - "perf(route): implement redis caching on users list"
+    - "test(role): add unit test for roles migration"
+    - "docs(api): document authentication endpoints"
+    - "chore(deps): update composer packages"
+    - "build(sail): configure phpmyadmin service in compose.yaml"
+    - "ci: add automated testing workflow"
+
+  bad:
+    - "update code"
+    - "changes"
+    - "fix"
+    - "done"
+    - "updated files"
+    - "Added New Feature"
+    - "Fixed the issue."
+
+validation:
+  before_action:
+    - "Explicit user confirmation must be obtained before creating branches, committing, or pushing changes."
+    - "Commit type must be one of the allowed types."
+    - "Commit message must follow Conventional Commits."
+    - "Description must be lowercase."
+    - "Description must not end with a period."
+    - "Commit must contain only related changes."
+    - "No secrets may be included."
