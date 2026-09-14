@@ -19,6 +19,13 @@ class UserSeeder extends Seeder
             ['id' => 3, 'name' => 'Delta Mart', 'email' => 'delta@example.com'],
             ['id' => 4, 'name' => 'Nova Traders', 'email' => 'nova@example.com'],
             ['id' => 5, 'name' => 'QuickMart', 'email' => 'quickmart@example.com'],
+            ['id' => 6, 'name' => 'Zenith Logistics', 'email' => 'zenith@example.com'],
+            ['id' => 7, 'name' => 'Apex Solutions', 'email' => 'apex@example.com'],
+            ['id' => 8, 'name' => 'Horizon Goods', 'email' => 'horizon@example.com'],
+            ['id' => 9, 'name' => 'Nexus Enterprises', 'email' => 'nexus@example.com'],
+            ['id' => 10, 'name' => 'Vantage Supplies', 'email' => 'vantage@example.com'],
+            ['id' => 11, 'name' => 'Quantum Retail', 'email' => 'quantum@example.com'],
+            ['id' => 12, 'name' => 'Radiant Store', 'email' => 'radiant@example.com'],
         ];
 
         foreach ($users as $user) {

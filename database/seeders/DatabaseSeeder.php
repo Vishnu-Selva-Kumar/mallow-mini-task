@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             PlanSeeder::class,
             UserSeeder::class,
             SubscriptionSeeder::class,
+            SubscriptionPeriodSeeder::class,
         ]);
     }
 }

@@ -67,4 +67,55 @@ class UsageService
             ];
         }
     }
+
+    /**
+     * Record a batch of usage event DTOs with idempotency.
+     *
+     * @param array<int, RecordUsageDTO> $dtos
+     * @return int Number of records processed
+     */
+    public function recordBatchUsage(array $dtos): int
+    {
+        if (empty($dtos)) {
+            return 0;
+        }
+
+        // Cache active subscriptions by user_id to minimize queries
+        $userIds = array_unique(array_map(fn (RecordUsageDTO $d) => $d->userId, $dtos));
+        $subscriptions = Subscription::whereIn('user_id', $userIds)
+            ->where('status', 'active')
+            ->pluck('id', 'user_id');
+
+        $now = now();
+        $insertData = [];
+
+        foreach ($dtos as $dto) {
+            $subscriptionId = $subscriptions[$dto->userId] ?? null;
+            if ($subscriptionId === null) {
+                continue;
+            }
+
+            $insertData[] = [
+                'user_id' => $dto->userId,
+                'subscription_id' => $subscriptionId,
+                'usage_date' => $dto->usageDate,
+                'units' => $dto->units,
+                'idempotency_key' => $dto->idempotencyKey,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        if (empty($insertData)) {
+            return 0;
+        }
+
+        UsageEvent::upsert(
+            $insertData,
+            ['idempotency_key'],
+            ['units', 'updated_at']
+        );
+
+        return count($insertData);
+    }
 }

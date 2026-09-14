@@ -143,6 +143,26 @@ This folder documents all prompts and AI interactions utilized during the develo
   - Updated [UsageIngestionTest](file:///d:/mallow/tests/Feature/UsageIngestionTest.php) to target `/api/usage`.
   - Re-executed full test suite in Docker: 20 passed, 179 assertions.
 
+### Prompt 12: Seeders Expansion & 120,000 Usage Records Simulation
+- **Prompt**:
+  > Create implementation plan  
+  > Merchant need 2 records seed from MerchantSeeder file  
+  > Plan need 2 records every merchant 2 * 2 = 4 Plans seeder from PlanSeeder  
+  > User need 12 records seed from UserSeeder file  
+  > Every user Subscription existing plan with diffent plan from SubscriptionSeeder ,and also SubscriptionPeriodSeeder for all users  
+  > Add SubscriptionPeriodSeeder in DatabaseSeeder file.  
+  > I need add sample data for `/api/usage` every users every user have 10,000 records diffent date , diffent unit  
+  > how to do it . ? don't use Seeder for this featuare
+- **Action**:
+  - Expanded [PlanSeeder](file:///d:/mallow/database/seeders/PlanSeeder.php) to 4 plans (2 for Merchant 1, 2 for Merchant 2).
+  - Expanded [UserSeeder](file:///d:/mallow/database/seeders/UserSeeder.php) to 12 users.
+  - Expanded [SubscriptionSeeder](file:///d:/mallow/database/seeders/SubscriptionSeeder.php) to 12 active subscriptions across varied plans.
+  - Expanded [SubscriptionPeriodSeeder](file:///d:/mallow/database/seeders/SubscriptionPeriodSeeder.php) to cover all 12 subscriptions (including mid-cycle plan upgrade segmentation).
+  - Added `SubscriptionPeriodSeeder::class` to [DatabaseSeeder](file:///d:/mallow/database/seeders/DatabaseSeeder.php).
+  - Implemented high-performance CLI command [SimulateUsageTrafficCommand](file:///d:/mallow/app/Console/Commands/SimulateUsageTrafficCommand.php) (`php artisan usage:simulate-traffic`), simulating `/api/usage` ingestion using `RecordUsageDTO` and `UsageService` (and optional `--http` mode).
+  - Ingested 120,000 usage records (10,000 per user across 12 users) in 7.7 seconds.
+  - Created [SimulateUsageTrafficCommandTest](file:///d:/mallow/tests/Feature/SimulateUsageTrafficCommandTest.php) and verified all 22 tests pass inside Docker.
+
 ---
 
 ## Screenshots Directory
@@ -151,3 +171,4 @@ Place IDE chat panel screenshots in this folder (`/prompts`) named chronological
 - `02_commit_rules_prompt.png`
 - `03_requirements_analysis_prompt.png`
 - `04_usage_metering_billing_prompt.png`
+- `05_seeders_and_traffic_simulation_prompt.png`
