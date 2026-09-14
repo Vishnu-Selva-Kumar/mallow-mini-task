@@ -41,12 +41,19 @@ class SubscriptionPeriodSeeder extends Seeder
             ]
         );
 
-        // Subscriptions 2 to 5: Standard active cycle
+        // Subscriptions 2 to 12: Standard active billing cycle
         $standardSubs = [
-            ['id' => 3, 'subscription_id' => 2, 'plan_id' => 2],
-            ['id' => 4, 'subscription_id' => 3, 'plan_id' => 2],
-            ['id' => 5, 'subscription_id' => 4, 'plan_id' => 1],
-            ['id' => 6, 'subscription_id' => 5, 'plan_id' => 1],
+            ['id' => 3,  'subscription_id' => 2,  'plan_id' => 1],
+            ['id' => 4,  'subscription_id' => 3,  'plan_id' => 4],
+            ['id' => 5,  'subscription_id' => 4,  'plan_id' => 3],
+            ['id' => 6,  'subscription_id' => 5,  'plan_id' => 2],
+            ['id' => 7,  'subscription_id' => 6,  'plan_id' => 1],
+            ['id' => 8,  'subscription_id' => 7,  'plan_id' => 4],
+            ['id' => 9,  'subscription_id' => 8,  'plan_id' => 3],
+            ['id' => 10, 'subscription_id' => 9,  'plan_id' => 2],
+            ['id' => 11, 'subscription_id' => 10, 'plan_id' => 1],
+            ['id' => 12, 'subscription_id' => 11, 'plan_id' => 4],
+            ['id' => 13, 'subscription_id' => 12, 'plan_id' => 3],
         ];
 
         foreach ($standardSubs as $period) {
