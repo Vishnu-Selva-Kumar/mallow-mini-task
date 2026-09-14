@@ -10,8 +10,9 @@ This folder documents all prompts and AI interactions utilized during the develo
 ## Log Entries
 
 ### Prompt 1: Initial Docker & Sail Project Setup
+
 - **Prompt**:
-  > Create implemtation Plan for below requriments 
+  > Create implemtation Plan for below requriments
   > Since you're on Windows 11 + Docker Desktop, you can create the latest Laravel project without installing PHP or Composer on Windows.
   > 1. Create a new Laravel project using Docker (Using the official Composer image)
   > 2. Install Laravel Sail
@@ -27,6 +28,7 @@ This folder documents all prompts and AI interactions utilized during the develo
 ---
 
 ### Prompt 2: Remote URL Correction & Git Push
+
 - **Prompt**:
   > chagne remove url 'git@github-personal:Vishnu-Selva-Kumar/'  
   > git push
@@ -37,6 +39,7 @@ This folder documents all prompts and AI interactions utilized during the develo
 ---
 
 ### Prompt 3: Commit Rules & Workflow Configuration
+
 - **Prompt**:
   > D:\express-js\.agents\rules\commit_type.yml
   > create rules file for this project and flow this rules
@@ -47,6 +50,7 @@ This folder documents all prompts and AI interactions utilized during the develo
 ---
 
 ### Prompt 4: Requirements Document Analysis
+
 - **Prompt**:
   > D:\mallow\.docs\requriments\Laravel_Senior_Developer_Mini_Task.pdf
   > just analys my requriment docs and give report for me
@@ -59,8 +63,9 @@ This folder documents all prompts and AI interactions utilized during the develo
 ---
 
 ### Prompt 5: Docker & Artisan Generation Rules
+
 - **Prompt**:
-  > create rule files for laravel artisn and docker 
+  > create rule files for laravel artisn and docker
   > example :
   > D:\job-core\job-core\.agents\rules\laravel-artisan-generation.md
   > D:\job-core\job-core\.agents\rules\laravel-docker.md
@@ -71,6 +76,7 @@ This folder documents all prompts and AI interactions utilized during the develo
 ---
 
 ### Prompt 6: Database Schema & Architecture Design
+
 - **Prompt**:
   > Create implementation plan and flow `.agents/rules` files  
   > Suggestion new branch name  
@@ -83,6 +89,7 @@ This folder documents all prompts and AI interactions utilized during the develo
 ---
 
 ### Prompt 7: Branch Checkout & Implementation Execution
+
 - **Prompt**:
   > create branch from `main` branch and checkout new branch and start work
 - **Action**:
@@ -96,6 +103,7 @@ This folder documents all prompts and AI interactions utilized during the develo
 ---
 
 ### Prompt 8: Usage Metering, Aggregation & Invoicing Plan
+
 - **Prompt**:
   > Create new Implementation plan and flow `.agents/rules` files  
   > suggestion for new branch name this Feature  
@@ -109,6 +117,7 @@ This folder documents all prompts and AI interactions utilized during the develo
   - Stored plan in `implementation_plan.md` and archived in `.docs/implementation_plans/03_usage_metering_and_billing.md`.
 
 ### Prompt 9: Branch Checkout & Usage Metering & Billing Implementation
+
 - **Prompt**:
   > Create branch feat/usage-metering-and-billing from main branch and start work
 - **Action**:
@@ -121,6 +130,7 @@ This folder documents all prompts and AI interactions utilized during the develo
   - Validated full test suite inside Docker: 20 passed, 179 assertions.
 
 ### Prompt 10: Refactor customer_id to user_id Across Ingestion Layer
+
 - **Prompt**:
   > check my review comment change all related files (customer_id changed to user_id, customerId to userId)
 - **Action**:
@@ -133,6 +143,7 @@ This folder documents all prompts and AI interactions utilized during the develo
   - Re-executed full test suite in Docker: 20 passed, 179 assertions.
 
 ### Prompt 11: Route Consolidation & Eloquent ERD Aggregation Refactoring
+
 - **Prompt**:
   > check my review comments and changes:
   > - why 2 POST route url i recommend `/api/usage` url need
@@ -144,6 +155,7 @@ This folder documents all prompts and AI interactions utilized during the develo
   - Re-executed full test suite in Docker: 20 passed, 179 assertions.
 
 ### Prompt 12: Seeders Expansion & 120,000 Usage Records Simulation
+
 - **Prompt**:
   > Create implementation plan  
   > Merchant need 2 records seed from MerchantSeeder file  
@@ -163,12 +175,23 @@ This folder documents all prompts and AI interactions utilized during the develo
   - Ingested 120,000 usage records (10,000 per user across 12 users) in 7.7 seconds.
   - Created [SimulateUsageTrafficCommandTest](file:///d:/mallow/tests/Feature/SimulateUsageTrafficCommandTest.php) and verified all 22 tests pass inside Docker.
 
+
+### Prompt 13: README Documentation & Docker Composer Setup Refinement
+
+- **Prompt**:
+  > Update README file with architecture, ERD, Docker setup, 50L+ volume scaling strategy, and refine Docker Composer installation instructions.
+- **Action**:
+  - Overhauled root `README.md` with system architecture diagrams, ERD, Docker setup instructions, scaling strategies, and edge case assumptions.
+  - Removed raw test terminal execution outputs and benchmark blocks for concise readability.
+  - Streamlined Docker Composer installation commands (`docker run --rm -v "${PWD}:/app" -w /app composer install --ignore-platform-reqs`) and verified execution inside container.
+
 ---
 
 ## Screenshots Directory
+
 Place IDE chat panel screenshots in this folder (`/prompts`) named chronologically, e.g.:
+
 - `01_project_setup_prompt.png`
 - `02_commit_rules_prompt.png`
 - `03_requirements_analysis_prompt.png`
 - `04_usage_metering_billing_prompt.png`
-- `05_seeders_and_traffic_simulation_prompt.png`
