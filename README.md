@@ -55,13 +55,13 @@ flowchart TD
     SUR --> DTO["RecordUsageDTO"]
     DTO --> US["UsageService"]
     
-    subgraph Storage & Caching Layer
+    subgraph StorageLayer ["Storage and Caching Layer"]
         US -->|Idempotency Check| UE[("usage_events (MySQL)")]
         US -->|Active Subscription Check| SUB[("subscriptions (MySQL)")]
-        PCS["PlanCacheService"] <-->|Cached Pricing (TTL 10m)| REDIS[("Redis Cache")]
+        PCS["PlanCacheService"] -->|Cache Pricing 10m TTL| REDIS[("Redis Cache")]
     end
 
-    subgraph Scalable Scheduled Jobs
+    subgraph JobLayer ["Scalable Scheduled Jobs"]
         CRON["Laravel Scheduler / Artisan CLI"] --> ADUJ["AggregateDailyUsageJob (chunk 5000)"]
         ADUJ -->|Grouped Rollup Upsert| DUA[("daily_usage_aggregates (MySQL)")]
         
@@ -91,7 +91,7 @@ erDiagram
     MERCHANTS {
         bigint id PK
         string name
-        timestamps created_at
+        timestamp created_at
     }
 
     PLANS {
