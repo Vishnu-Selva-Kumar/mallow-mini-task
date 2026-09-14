@@ -95,8 +95,59 @@ This folder documents all prompts and AI interactions utilized during the develo
 
 ---
 
+### Prompt 8: Usage Metering, Aggregation & Invoicing Plan
+- **Prompt**:
+  > Create new Implementation plan and flow `.agents/rules` files  
+  > suggestion for new branch name this Feature  
+  > 1. High-Throughput & Idempotent POST /usage (Flow: Controller -> Request -> DTO -> Service -> Check customer -> Check subscription -> Insert)  
+  > 2. Queued & Chunked Aggregation & Invoicing Job (AggregateDailyUsageJob, GenerateInvoiceJob)  
+  > 3. Plan & Pricing Caching (Redis)  
+  > Need Feature testing and Unit testing
+- **Action**:
+  - Suggested branch name: `feat/usage-metering-and-billing`.
+  - Designed clean service-oriented architecture with DTOs, idempotent ingestion, chunked background jobs (`chunkById(5000)`), Redis caching (TTL 10m), rate limiting, and comprehensive unit/feature test matrix.
+  - Stored plan in `implementation_plan.md` and archived in `.docs/implementation_plans/03_usage_metering_and_billing.md`.
+
+### Prompt 9: Branch Checkout & Usage Metering & Billing Implementation
+- **Prompt**:
+  > Create branch feat/usage-metering-and-billing from main branch and start work
+- **Action**:
+  - Checked out branch `feat/usage-metering-and-billing` from `main`.
+  - Implemented high-throughput idempotent usage ingestion: `RecordUsageDTO`, `StoreUsageRequest`, `UsageService`, `UsageController`, rate limiter (120 req/min) in `AppServiceProvider`, and routes in `routes/web.php`.
+  - Implemented plan & pricing caching: `PlanCacheService` (Redis 10m TTL with instant cache invalidation).
+  - Implemented scalable background aggregation and billing: `AggregateDailyUsageJob` (5,000 chunked upserts to `daily_usage_aggregates`), `GenerateInvoiceJob` (500 chunked invoice processing), and Artisan commands `usage:aggregate-daily` & `billing:generate-invoices`.
+  - Implemented core billing engine: `BillingService` with base fee proration, segmented mid-cycle upgrades/downgrades, and overage calculations.
+  - Implemented comprehensive test coverage: `tests/Unit/BillingCalculationTest.php`, `tests/Feature/UsageIngestionTest.php`, `tests/Feature/DailyAggregationJobTest.php`, `tests/Feature/InvoiceGenerationTest.php`, and `tests/Feature/PlanCacheTest.php`.
+  - Validated full test suite inside Docker: 20 passed, 179 assertions.
+
+### Prompt 10: Refactor customer_id to user_id Across Ingestion Layer
+- **Prompt**:
+  > check my review comment change all related files (customer_id changed to user_id, customerId to userId)
+- **Action**:
+  - Refactored [RecordUsageDTO](file:///d:/mallow/app/DTOs/RecordUsageDTO.php) from `customerId` / `customer_id` to `userId` / `user_id`.
+  - Refactored [StoreUsageRequest](file:///d:/mallow/app/Http/Requests/StoreUsageRequest.php) validation rules to enforce `user_id`.
+  - Refactored [UsageService](file:///d:/mallow/app/Services/UsageService.php) to use `userId` on the DTO and reference the `User` model.
+  - Refactored [UsageController](file:///d:/mallow/app/Http/Controllers/UsageController.php) response data to return `user_id`.
+  - Refactored [AppServiceProvider](file:///d:/mallow/app/Providers/AppServiceProvider.php) rate limiting key to evaluate `user_id`.
+  - Refactored [UsageIngestionTest](file:///d:/mallow/tests/Feature/UsageIngestionTest.php) payloads and assertions to `user_id`.
+  - Re-executed full test suite in Docker: 20 passed, 179 assertions.
+
+### Prompt 11: Route Consolidation & Eloquent ERD Aggregation Refactoring
+- **Prompt**:
+  > check my review comments and changes:
+  > - why 2 POST route url i recommend `/api/usage` url need
+  > - Don't use \Illuminate\Support\Facades\DB::table , use UsageEvent Model , ERD approach
+- **Action**:
+  - Removed duplicate `POST /usage` route in [routes/web.php](file:///d:/mallow/routes/web.php), retaining only `POST /api/usage`.
+  - Refactored [AggregateDailyUsageJob](file:///d:/mallow/app/Jobs/AggregateDailyUsageJob.php) to use `UsageEvent::query()` instead of `\Illuminate\Support\Facades\DB::table('usage_events')`.
+  - Updated [UsageIngestionTest](file:///d:/mallow/tests/Feature/UsageIngestionTest.php) to target `/api/usage`.
+  - Re-executed full test suite in Docker: 20 passed, 179 assertions.
+
+---
+
 ## Screenshots Directory
 Place IDE chat panel screenshots in this folder (`/prompts`) named chronologically, e.g.:
 - `01_project_setup_prompt.png`
 - `02_commit_rules_prompt.png`
 - `03_requirements_analysis_prompt.png`
+- `04_usage_metering_billing_prompt.png`
