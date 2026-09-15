@@ -208,6 +208,27 @@ This folder documents all prompts and AI interactions utilized during the develo
   - Generated and implemented comprehensive test suite [MerchantDashboardTest](file:///d:/mallow/tests/Feature/MerchantDashboardTest.php) (9 tests, 70 assertions).
   - All 31 tests passed across the entire application with 255 assertions inside Docker.
 
+### Prompt 15: Mid-Cycle Plan Changes (Upgrade/Downgrade) & Subscription Phases
+
+- **Prompt**:
+  > Create implematation Plan and flow `.agents/rules` files  
+  > Mid-Cycle Plan Changes (Upgrade/Downgrade)  
+  > Support subscription periods/phases. Segment usage before vs. after plan change date, calculating independent allowances, overages, and prorated base amounts.  
+  > Mid-Cycle Upgrades/Downgrades (Req 8): Segregated calculation:  
+  > Usage recorded before the change is billed against the old plan's rates and allowance.  
+  > Usage recorded after the change is billed against the new plan's rates and allowance.  
+  > Base fees for both plans are prorated for their respective active days.  
+- **Action**:
+  - Checked out new feature branch `feat/mid-cycle-plan-changes` upon user confirmation.
+  - Generated [SubscriptionPlanChangedEvent](file:///d:/mallow/app/Events/SubscriptionPlanChangedEvent.php) via `docker exec mallow-laravel.test-1 php artisan make:event`.
+  - Generated [ChangeSubscriptionPlanCommand](file:///d:/mallow/app/Console/Commands/ChangeSubscriptionPlanCommand.php) via `docker exec mallow-laravel.test-1 php artisan make:command`.
+  - Generated [MidCyclePlanChangeTest](file:///d:/mallow/tests/Feature/MidCyclePlanChangeTest.php) via `docker exec mallow-laravel.test-1 php artisan make:test`.
+  - Created [SubscriptionService](file:///d:/mallow/app/Services/SubscriptionService.php) to manage mid-cycle plan switches, close preceding active periods, activate new periods, and fire events in a database transaction.
+  - Hardened [BillingService](file:///d:/mallow/app/Services/BillingService.php) to accurately segment usage before/after change dates with fallback to daily aggregates, calculating prorated base prices and independent overages per phase.
+  - Enhanced [MerchantDashboardService](file:///d:/mallow/app/Services/MerchantDashboardService.php) to dynamically sum allowances across multi-period subscription segments.
+  - Verified with 8 new feature tests in `MidCyclePlanChangeTest` (39 passing tests total, 301 assertions).
+  - Executed plan upgrade on user (`Subscription #2`, Craft Foods Co.) via `php artisan subscription:change-plan 2 2 --date=2026-09-16`, verifying detailed CLI breakdown table, invoice generation, and live Merchant Dashboard updates.
+
 ---
 
 ## Screenshots Directory
@@ -219,3 +240,4 @@ Place IDE chat panel screenshots in this folder (`/prompts`) named chronological
 - `03_requirements_analysis_prompt.png`
 - `04_usage_metering_billing_prompt.png`
 - `05_merchant_dashboard_prompt.png`
+- `06_mid_cycle_plan_changes_prompt.png`
