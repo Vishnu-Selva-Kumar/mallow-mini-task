@@ -82,16 +82,18 @@ All commands must be run inside Docker container `mallow-laravel.test-1`.
 Simulates realistic, high-throughput traffic through the DTO and service layer **without using database seeders**:
 
 ```bash
-docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=12 --records-per-user=10000
+docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=12 --records-per-user=1000
 ```
 
-- Ingests **120,000 usage records** across 12 active users.
+- Ingests **12,000 usage records** across 12 active users.
 - Validates rate-limiter resilience, transaction throughput (>13,000 req/sec), and unique idempotency generation.
 
 #### Simulate Previous Month Traffic (Churn Risk Testing)
+
 ```bash
-docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=1 --records-per-user=35000 --start-date=2026-08-01 --end-date=2026-08-31
+docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=5 --records-per-user=35000 --start-date=2026-08-01 --end-date=2026-08-31
 ```
+
 - Ingests 35,000 events in August for customer #1 to trigger a >50% MoM churn risk alert on the Merchant Dashboard.
 
 ---

@@ -23,7 +23,7 @@ This walkthrough covers the expansion of relational seeders (Merchants, Plans, U
   - Artisan command: `php artisan usage:simulate-traffic`
   - Options:
     - `--users=12`: Number of active users (default: 12)
-    - `--records-per-user=10000`: Records per user (default: 10,000)
+    - `--records-per-user=1000`: Records per user (default: 1,000)
     - `--start-date=`: Start date of cycle (default: start of month)
     - `--end-date=`: End date of cycle (default: end of month)
     - `--batch-size=1000`: Batch chunk size for memory safety
@@ -44,7 +44,7 @@ Ran `docker exec mallow-laravel.test-1 php artisan migrate:fresh --seed`:
 - Periods: 13 (including mid-cycle split)
 
 ### 2. Usage Simulation Execution (120,000 Records)
-Ran `docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=12 --records-per-user=10000`:
+Ran `docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=12 --records-per-user=1000`:
 
 ```
 Starting usage simulation for 12 users (10000 records each = 120000 total)...

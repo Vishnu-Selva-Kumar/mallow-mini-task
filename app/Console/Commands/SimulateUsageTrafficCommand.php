@@ -21,7 +21,7 @@ class SimulateUsageTrafficCommand extends Command
      */
     protected $signature = 'usage:simulate-traffic
         {--users=12 : Number of active users to generate usage for}
-        {--records-per-user=10000 : Number of usage records per user}
+        {--records-per-user=1000 : Number of usage records per user}
         {--start-date= : Start date for usage dates (YYYY-MM-DD, defaults to start of current month)}
         {--end-date= : End date for usage dates (YYYY-MM-DD, defaults to end of current month)}
         {--batch-size=1000 : Batch size for memory safety and bulk ingestion}
