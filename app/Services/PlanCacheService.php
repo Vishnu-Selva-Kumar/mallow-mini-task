@@ -17,9 +17,24 @@ class PlanCacheService
     {
         $cacheKey = $this->getPlanCacheKey($planId);
 
-        return Cache::remember($cacheKey, self::TTL_SECONDS, function () use ($planId) {
-            return Plan::find($planId);
-        });
+        $plan = Cache::get($cacheKey);
+
+        if ($plan instanceof Plan) {
+            return $plan;
+        }
+
+        // Evict corrupted or incomplete cached object if present
+        if ($plan !== null) {
+            Cache::forget($cacheKey);
+        }
+
+        $plan = Plan::find($planId);
+
+        if ($plan) {
+            Cache::put($cacheKey, $plan, self::TTL_SECONDS);
+        }
+
+        return $plan;
     }
 
     /**
@@ -29,9 +44,21 @@ class PlanCacheService
     {
         $cacheKey = "merchant:{$merchantId}:plans";
 
-        return Cache::remember($cacheKey, self::TTL_SECONDS, function () use ($merchantId) {
-            return Plan::where('merchant_id', $merchantId)->get();
-        });
+        $plans = Cache::get($cacheKey);
+
+        if ($plans instanceof Collection) {
+            return $plans;
+        }
+
+        if ($plans !== null) {
+            Cache::forget($cacheKey);
+        }
+
+        $plans = Plan::where('merchant_id', $merchantId)->get();
+
+        Cache::put($cacheKey, $plans, self::TTL_SECONDS);
+
+        return $plans;
     }
 
     /**

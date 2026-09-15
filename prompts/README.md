@@ -185,6 +185,29 @@ This folder documents all prompts and AI interactions utilized during the develo
   - Removed raw test terminal execution outputs and benchmark blocks for concise readability.
   - Streamlined Docker Composer installation commands (`docker run --rm -v "${PWD}:/app" -w /app composer install --ignore-platform-reqs`) and verified execution inside container.
 
+### Prompt 14: Merchant Analytics Dashboard & Automated Test Suite
+
+- **Prompt**:
+  > Create implementation plan and flow `.agents/rules` rule files
+  > Suggestion new branch name for this implementation:
+  > 1. UI Dashboard Specifications (Wireframe Reference)
+  >    Merchant Dashboard (GET /merchants/{id}/dashboard)
+  >    Return real-time business insights:
+  >    - Top 5 customers by usage this cycle and % of allowance
+  >    - Projected overage revenue for current cycle
+  >    - Churn risk alerts: customers with usage drop > 50% month-over-month (MoM)
+  >    - 30-day daily usage trend
+  >    Key metric cards, top customers table, churn risk panel, daily usage trend graph, system status widget.
+  > 2. Automated Test Suite (PHPUnit / Pest)
+- **Action**:
+  - Checked out new feature branch `feat/merchant-analytics-dashboard`.
+  - Generated [MerchantDashboardController](file:///d:/mallow/app/Http/Controllers/MerchantDashboardController.php) via Artisan.
+  - Implemented [MerchantDashboardService](file:///d:/mallow/app/Services/MerchantDashboardService.php) and [DashboardMetricsDTO](file:///d:/mallow/app/DTOs/DashboardMetricsDTO.php).
+  - Created modern, interactive SaaS Blade UI [merchant.blade.php](file:///d:/mallow/resources/views/dashboard/merchant.blade.php) with Chart.js 30-day trendline.
+  - Registered web and JSON API dashboard routes in [routes/web.php](file:///d:/mallow/routes/web.php).
+  - Generated and implemented comprehensive test suite [MerchantDashboardTest](file:///d:/mallow/tests/Feature/MerchantDashboardTest.php) (9 tests, 70 assertions).
+  - All 31 tests passed across the entire application with 255 assertions inside Docker.
+
 ---
 
 ## Screenshots Directory
@@ -195,3 +218,4 @@ Place IDE chat panel screenshots in this folder (`/prompts`) named chronological
 - `02_commit_rules_prompt.png`
 - `03_requirements_analysis_prompt.png`
 - `04_usage_metering_billing_prompt.png`
+- `05_merchant_dashboard_prompt.png`
