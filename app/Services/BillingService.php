@@ -72,6 +72,12 @@ class BillingService
                 ->whereBetween('usage_date', [$segmentStart->toDateString(), $segmentEnd->toDateString()])
                 ->sum('units');
 
+            if ($segmentUnits === 0) {
+                $segmentUnits = (int) \App\Models\DailyUsageAggregate::where('subscription_id', $subscription->id)
+                    ->whereBetween('usage_date', [$segmentStart->toDateString(), $segmentEnd->toDateString()])
+                    ->sum('total_usage');
+            }
+
             // Prorate allowance to this segment duration
             $segmentAllowance = (int) round($plan->included_units * $prorationFraction);
             $overageUnits = max(0, $segmentUnits - $segmentAllowance);
@@ -83,7 +89,10 @@ class BillingService
 
             $segments[] = [
                 'period_id' => $period->id,
+                'plan_id' => $plan->id,
                 'plan_name' => $plan->name,
+                'starts_at' => $segmentStart->toDateString(),
+                'ends_at' => $segmentEnd->toDateString(),
                 'segment_days' => $segmentDays,
                 'segment_base' => $segmentBase,
                 'units_used' => $segmentUnits,
@@ -148,6 +157,12 @@ class BillingService
         $totalUnits = (int) UsageEvent::where('subscription_id', $subscription->id)
             ->whereBetween('usage_date', [$cycleStart->toDateString(), $cycleEnd->toDateString()])
             ->sum('units');
+
+        if ($totalUnits === 0) {
+            $totalUnits = (int) \App\Models\DailyUsageAggregate::where('subscription_id', $subscription->id)
+                ->whereBetween('usage_date', [$cycleStart->toDateString(), $cycleEnd->toDateString()])
+                ->sum('total_usage');
+        }
 
         $allowance = (int) round($plan->included_units * $prorationFraction);
         $overageUnits = max(0, $totalUnits - $allowance);

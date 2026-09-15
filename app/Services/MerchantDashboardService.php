@@ -33,18 +33,9 @@ class MerchantDashboardService
             ->with(['user', 'plan', 'activePeriod'])
             ->get();
 
-        // Determine current billing cycle start and end
-        $firstActivePeriod = SubscriptionPeriod::whereIn('subscription_id', $subscriptions->pluck('id'))
-            ->where('status', 'active')
-            ->first();
-
-        if ($firstActivePeriod) {
-            $cycleStart = Carbon::parse($firstActivePeriod->starts_at)->startOfDay();
-            $cycleEnd = Carbon::parse($firstActivePeriod->ends_at)->startOfDay();
-        } else {
-            $cycleStart = $target->copy()->startOfMonth();
-            $cycleEnd = $target->copy()->endOfMonth();
-        }
+        // Determine current billing cycle start and end (current month bounds)
+        $cycleStart = $target->copy()->startOfMonth();
+        $cycleEnd = $target->copy()->endOfMonth();
 
         $totalCycleUsage = 0;
         $totalPlanAllowance = 0;
@@ -60,10 +51,17 @@ class MerchantDashboardService
         foreach ($subscriptions as $sub) {
             $billing = $this->billingService->calculateSubscriptionBilling($sub, $cycleStart, $cycleEnd);
             $plan = $sub->plan;
-            $allowance = (int) ($plan->included_units ?? 0);
+
+            // Compute effective allowance across segments if mid-cycle changes exist
+            $allowance = !empty($billing['segments'])
+                ? (int) array_sum(array_column($billing['segments'], 'allowance'))
+                : (int) ($plan->included_units ?? 0);
+
             $unitsUsed = (int) $billing['units_used'];
             $overageAmount = (float) $billing['overage_amount'];
-            $overageUnits = max(0, $unitsUsed - $allowance);
+            $overageUnits = !empty($billing['segments'])
+                ? (int) array_sum(array_column($billing['segments'], 'overage_units'))
+                : max(0, $unitsUsed - $allowance);
 
             $totalCycleUsage += $unitsUsed;
             $totalPlanAllowance += $allowance;
