@@ -88,6 +88,12 @@ docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=12 
 - Ingests **120,000 usage records** across 12 active users.
 - Validates rate-limiter resilience, transaction throughput (>13,000 req/sec), and unique idempotency generation.
 
+#### Simulate Previous Month Traffic (Churn Risk Testing)
+```bash
+docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=1 --records-per-user=35000 --start-date=2026-08-01 --end-date=2026-08-31
+```
+- Ingests 35,000 events in August for customer #1 to trigger a >50% MoM churn risk alert on the Merchant Dashboard.
+
 ---
 
 ### 2. Queued Daily Usage Aggregation (`usage:aggregate-daily`)

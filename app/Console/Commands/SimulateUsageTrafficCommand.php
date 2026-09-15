@@ -87,7 +87,7 @@ class SimulateUsageTrafficCommand extends Command
             foreach ($users as $user) {
                 for ($i = 1; $i <= $recordsPerUser; $i++) {
                     $randomDate = $availableDates[($i % $dateCount)];
-                    $units = rand(5, 300);
+                    $units = rand(5, 95);
                     $key = "sim-http-u{$user->id}-{$randomDate}-{$i}-" . Str::random(8);
 
                     Http::post($endpoint, [
@@ -108,7 +108,7 @@ class SimulateUsageTrafficCommand extends Command
             foreach ($users as $user) {
                 for ($i = 1; $i <= $recordsPerUser; $i++) {
                     $randomDate = $availableDates[($i % $dateCount)];
-                    $units = rand(5, 300);
+                    $units = rand(5, 95);
                     $key = "sim-pipe-u{$user->id}-{$randomDate}-{$i}-" . Str::random(8);
 
                     $dtoBatch[] = new RecordUsageDTO(

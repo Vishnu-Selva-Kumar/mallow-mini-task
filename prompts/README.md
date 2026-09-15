@@ -229,6 +229,20 @@ This folder documents all prompts and AI interactions utilized during the develo
   - Verified with 8 new feature tests in `MidCyclePlanChangeTest` (39 passing tests total, 301 assertions).
   - Executed plan upgrade on user (`Subscription #2`, Craft Foods Co.) via `php artisan subscription:change-plan 2 2 --date=2026-09-16`, verifying detailed CLI breakdown table, invoice generation, and live Merchant Dashboard updates.
 
+### Prompt 16: Simulation Unit Refinements & Churn Risk Testing Documentation
+
+- **Prompt**:
+  > Aggregate usage events for a date into daily rollups (5,000 chunked)  
+  > Churn Risk Alert Panel: Identifies customers whose usage dropped > 50% month-over-month (MoM). No data available why ..??  
+  > docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=1 --records-per-user=35000 --start-date=2026-08-01 --end-date=2026-08-31  
+  > update this information in README file  
+- **Action**:
+  - Investigated and explained churn risk detection criteria: requires non-zero previous cycle usage (August) vs current cycle (September) to prevent false positives for newly joined subscribers.
+  - Refined random unit generation range in [SimulateUsageTrafficCommand](file:///d:/mallow/app/Console/Commands/SimulateUsageTrafficCommand.php) to `rand(5, 95)`.
+  - Executed previous-month simulation: ingested 35,000 events in August for customer #1 (Beta Retail Pvt Ltd), generating ~3.5M units.
+  - Verified live dashboard output: customer #1 immediately flagged with **98.6% usage drop alert** in Churn Risk Alert Panel.
+  - Updated [README.md](file:///d:/mallow/README.md), [docs/merchant-dashboard.md](file:///d:/mallow/docs/merchant-dashboard.md), and [docs/api-and-cli-reference.md](file:///d:/mallow/docs/api-and-cli-reference.md) with churn risk simulation command and usage guidelines.
+
 ---
 
 ## Screenshots Directory
@@ -241,3 +255,4 @@ Place IDE chat panel screenshots in this folder (`/prompts`) named chronological
 - `04_usage_metering_billing_prompt.png`
 - `05_merchant_dashboard_prompt.png`
 - `06_mid_cycle_plan_changes_prompt.png`
+- `07_churn_risk_simulation_prompt.png`

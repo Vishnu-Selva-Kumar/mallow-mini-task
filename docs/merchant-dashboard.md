@@ -42,6 +42,13 @@ The dashboard supports content negotiation:
   $$\text{Usage Drop} = \frac{\text{Previous Cycle Usage} - \text{Current Cycle Usage}}{\text{Previous Cycle Usage}} > 0.50 \quad (50\%)$$
 - Customers without prior cycle data or zero usage in both cycles are excluded to avoid false positives.
 
+#### Simulating Previous Month Traffic for Churn Alerts
+To populate this panel with live test alerts:
+```bash
+docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=1 --records-per-user=35000 --start-date=2026-08-01 --end-date=2026-08-31
+```
+This generates 35,000 usage events (~3.5M units) in August for User #1 (Beta Retail Pvt Ltd). When compared to September usage (~48k units), the dashboard immediately flags a **98.6% usage drop alert**.
+
 ### 30-Day Chronological Usage Trend
 - Interactive line graph powered by Chart.js.
 - Spans 30 consecutive calendar days, automatically backfilling zero-usage days to maintain an unbroken chronological timeline.

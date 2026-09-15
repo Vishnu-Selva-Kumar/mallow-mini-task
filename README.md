@@ -70,6 +70,9 @@ docker exec mallow-laravel.test-1 php artisan test
 # Ingest 120,000 usage events (10k per user across 12 active users)
 docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=12 --records-per-user=10000
 
+# Simulate previous month (August) traffic to trigger Churn Risk Alerts (>50% MoM drop)
+docker exec mallow-laravel.test-1 php artisan usage:simulate-traffic --users=1 --records-per-user=35000 --start-date=2026-08-01 --end-date=2026-08-31
+
 # Aggregate usage events for a date into daily rollups (5,000 chunked)
 docker exec mallow-laravel.test-1 php artisan usage:aggregate-daily --date=2026-09-15
 
